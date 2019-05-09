@@ -39,4 +39,11 @@ public class DrawPoint {
 		this.point = point;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		DrawPoint p = (DrawPoint)obj;
+		if(this.x==p.x && this.y==p.y && this.point.getNum()==p.point.getNum())
+			return true;
+		return false;
+	}
 }

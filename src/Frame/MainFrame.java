@@ -1,5 +1,7 @@
 package Frame;
 
+import Manager.GameController;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -42,6 +44,10 @@ public class MainFrame extends JFrame {
 		add(gamePanel, BorderLayout.WEST);
 		add(inputPanel, BorderLayout.EAST);
 		add(bottom, BorderLayout.SOUTH);
+
+		// 初始化控制器
+		GameController controller = GameController.getInstance();
+		controller.init(gamePanel,null,game); // 传入
 
 		// 窗口初始化
 		setTitle(TITLE);

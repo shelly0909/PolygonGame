@@ -42,4 +42,11 @@ public class DrawEdge {
 		return edge;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		DrawEdge d = (DrawEdge) obj;
+		if(this.p1.equals(d.p1) && this.p2.equals(d.p2) && this.edge.getOp()==d.edge.getOp())
+			return true;
+		return false;
+	}
 }

@@ -7,21 +7,25 @@ import Element.*;
 //这个是用来计算各个点和边的元素的属性的
 //之后会传给GameFrame的一个数组把数据全部传过去
 public class PolygonManager {
-
+	int width = 500;// 画板的总体长度
+	int height = 500;// 画板的总体宽度
+	int margin = 40;// 设置边缘，也是画端点时圆的半径
+	int x0;
+	int y0;
+	int r;
+	double degree;
 	public Polygon[] polygonData(int n) {
-		int width = 500;// 画板的总体长度
-		int height = 500;// 画板的总体宽度
-		int margin = 40;// 设置边缘，也是画端点时圆的半径
+
 
 		// 如何计算正多边形的端点位置
 		// 圆心角a的度数为360/n，弧度计算为2π/n
 		// 如果把圆心的坐标为(0,0)，那么顶点P1的坐标为[X1=cos(a),Y1=sin(a)]
 		// 以此类推，顶点Pn坐标为[Xn=cos(a*n),Yn=sin(a*n)]
 		// 所以Pn的实际坐标是[Xn+Ox,Yn+Oy]
-		int x0 = (width - 2 * margin) / 2;// 外接矩形的中心
-		int y0 = (height - 2 * margin) / 2;
-		int r = (width - 4 * margin) / 2;// 正多边形圆的半径
-		double degree = 360.0 / n;// 圆心角
+		 x0 = (width - 2 * margin) / 2;// 外接矩形的中心
+		 y0 = (height - 2 * margin) / 2;
+		 r = (width - 4 * margin) / 2;// 正多边形圆的半径
+		 degree = 360.0 / n;// 圆心角
 
 		Polygon[] pls;
 		pls = new Polygon[n];
@@ -69,6 +73,46 @@ public class PolygonManager {
 		}
 		return pls;
 	}
+	public Polygon[] cloneArray(Polygon[] p){
+		int n = p.length;
+		Polygon[] res = new Polygon[n];
+		DrawPoint[] drawPoints = new DrawPoint[n];
+		for(int i=0;i<n;i++){
+			// 创建点
+			drawPoints[i] = new DrawPoint(p[i].points.getX(),p[i].points.getY(),new Point(p[i].points.getPoint().getNum()));
+		}
+		DrawEdge[] drawEdges = new DrawEdge[n];
+		for (int i = 0; i < n; i++) {
+			if(p[i].edges!=null){
+				if (i != n - 1) {
+					drawEdges[i] = new DrawEdge(drawPoints[i], drawPoints[i + 1], new Edge(p[i].edges.getEdge().getOp()));
+				} else {
+					drawEdges[i] = new DrawEdge(drawPoints[i], drawPoints[0], new Edge(p[i].edges.getEdge().getOp()));
+				}
+			}else{
+				drawEdges[i] = null;
+			}
+
+		}
+		// 边和端点封装到多边形类里
+		for (int i = 0; i < n; i++) {
+			res[i] = new Polygon(drawEdges[i], drawPoints[i]);
+		}
+		return res;
+	}
+	public Polygon[] calculateNewPos(Polygon[] p,int n){
+		degree = 360.0 / n;
+		// 计算具体端点位置
+		for (int i = 0; i < n; i++) {
+			double x = x0 + r * Math.sin(i * degree / 180 * Math.PI);
+			double y = y0 + r * Math.cos(i * degree / 180 * Math.PI);
+			p[i].getPoints().setX((int) x);
+			p[i].getPoints().setY((int) y);
+
+		}
+
+		return p;
+	}
 
 	// 随机生成各条边的运算符
 	public char[] opRandom(int n) {
@@ -76,16 +120,16 @@ public class PolygonManager {
 		operator = new char[n];
 		for (int i = 0; i < n; i++) {
 			Random ran = new Random();
-			int choose = ran.nextInt(4);
+			int choose = ran.nextInt(2);
 			switch (choose) {
 			case 0:
 				operator[i] = '+';
 				break;
 			case 1:
-				operator[i] = '-';
+				operator[i] = '*';
 				break;
 			case 2:
-				operator[i] = '*';
+				operator[i] = '-';
 				break;
 			case 3:
 				operator[i] = '/';
