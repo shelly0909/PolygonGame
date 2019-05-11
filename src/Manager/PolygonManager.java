@@ -30,8 +30,10 @@ public class PolygonManager {
 		Polygon[] pls;
 		pls = new Polygon[n];
 
-		char[] op = new PolygonManager().opRandom(n);// 边的符号赋值
-		int[] num = new PolygonManager().numRandom(n);// 边的数值赋值
+//		char[] op = new PolygonManager().opRandom(n);// 边的符号赋值
+//		int[] num = new PolygonManager().numRandom(n);// 边的数值赋值
+		int num[]= {28, 74, 27, 94, 31};
+		char[] op = {'+','+','+','*','+'};
 
 		// 对象都初始化好，不然会报错
 		Edge[] edges;
@@ -45,7 +47,7 @@ public class PolygonManager {
 
 		// 边数组初始化
 		for (int i = 0; i < n; i++) {
-			edges[i] = new Edge(op[i]);
+			edges[i] = new Edge(op[i],i);
 		}
 		// 点数初始化
 		for (int i = 0; i < n; i++) {
@@ -85,9 +87,9 @@ public class PolygonManager {
 		for (int i = 0; i < n; i++) {
 			if(p[i].edges!=null){
 				if (i != n - 1) {
-					drawEdges[i] = new DrawEdge(drawPoints[i], drawPoints[i + 1], new Edge(p[i].edges.getEdge().getOp()));
+					drawEdges[i] = new DrawEdge(drawPoints[i], drawPoints[i + 1], new Edge(p[i].edges.getEdge().getOp(),p[i].edges.getEdge().getIndex()));
 				} else {
-					drawEdges[i] = new DrawEdge(drawPoints[i], drawPoints[0], new Edge(p[i].edges.getEdge().getOp()));
+					drawEdges[i] = new DrawEdge(drawPoints[i], drawPoints[0], new Edge(p[i].edges.getEdge().getOp(),p[i].edges.getEdge().getIndex()));
 				}
 			}else{
 				drawEdges[i] = null;

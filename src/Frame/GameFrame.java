@@ -21,15 +21,21 @@ public class GameFrame{
 	public JLine[] line;
 	public int n;
 	public PolygonManager manager;
+	public int colotOne = -1;
+	public static final int PLAYMODE =0;
+	public static final int BESTMODE =1;
+	private int mode;
 
 
-	public JPanel init() {
+	public JPanel init(int mode) {
+		this.mode = mode;
 		// 获取具体绘制的位置数据
 		PolygonManager pm = new PolygonManager();
 		Random ran = new Random();
 //		int n = ran.nextInt(16);
 		n=5;
 		plss = pm.polygonData(n);
+
 		this.manager = pm;
 		int length = plss.length;
 		for (int i = 0; i < length; i++) {
@@ -50,13 +56,16 @@ public class GameFrame{
 				for (int i = 0; i < len; i++) {
 
 					//设置画笔的颜色
-					g.setColor(Color.decode("#F18F01"));
+					if(colotOne!=-1 && i==colotOne)
+						g.setColor(Color.decode("#98F898"));
+					else
+						g.setColor(Color.decode("#F18F01"));
 					//获取端点坐标值
 					int x=plss[i].getPoints().getX();
 					int y=plss[i].getPoints().getY();
 					//画端点圆
 					g.fillOval(x-15,y-15,40,40);
-					
+
 					g.setColor(Color.decode("#0A122A"));
 					g.setFont(new Font("微软雅黑", Font.BOLD, 20));
 					//写上端点对应的数值
@@ -110,9 +119,10 @@ public class GameFrame{
 			int y = height==20?(tPoint[0].getY()-20):tPoint[0].getY();
 			System.out.println("old:x"+x+",y:"+y+",width:"+width+",height:"+height);
 			line[i].setBounds(x,y,width,height);
-			line[i].setBorder(BorderFactory.createLineBorder(Color.red));
-			line[i].addMouseListener(listener);
-			line[i].setText(x+" "+y);
+//			line[i].setBorder(BorderFactory.createLineBorder(Color.red));
+			if(mode==PLAYMODE)
+				line[i].addMouseListener(listener);
+//			line[i].setText(x+" "+y);
 			panel.add(line[i]);
 		}
 	}
@@ -125,11 +135,11 @@ public class GameFrame{
 			if(line[i].isVisible()){
 				// 只对显示的线更新坐标
 				for(int j=0;j<plss.length;j++){
-					if(plss[j].getEdges()!=null
-							&& plss[j].getEdges().getEdge().getOp()==line[i].i.getEdge().getOp()
-							&& (plss[j].getEdges().getP1().getPoint().getNum() == line[i].i.getP1().getPoint().getNum()
-							|| plss[j].getEdges().getP2().getPoint().getNum() == line[i].i.getP2().getPoint().getNum() )){
-
+//					if(plss[j].getEdges()!=null
+//							&& plss[j].getEdges().getEdge().getOp()==line[i].i.getEdge().getOp()
+//							&& (plss[j].getEdges().getP1().getPoint().getNum() == line[i].i.getP1().getPoint().getNum()
+//							|| plss[j].getEdges().getP2().getPoint().getNum() == line[i].i.getP2().getPoint().getNum() )){
+					if(plss[j].edges!=null && plss[j].edges.getEdge().getIndex()==line[i].i.getEdge().getIndex()){
 						DrawPoint[] tPoint = rebuildPoint(plss[j].getEdges().getP1(),plss[j].getEdges().getP2());
 						tPoint[0].setX(tPoint[0].getX()+r);
 						tPoint[0].setY(tPoint[0].getY()+r);
@@ -146,7 +156,7 @@ public class GameFrame{
 						int x = width==20?(tPoint[0].getX()-20):tPoint[0].getX();
 						int y = height==20?(tPoint[0].getY()-20):tPoint[0].getY();
 						System.out.println("new:x"+x+",y:"+y+",width:"+width+",height:"+height);
-						line[i].setText(x+" "+y);
+//						line[i].setText(x+" "+y);
 						line[i].setBounds(x,y,width,height);
 					}
 				}
@@ -171,5 +181,9 @@ public class GameFrame{
 			t[1] = new DrawPoint(p2.getX(),p1.getY(),null);
 		}
 		return t;
+	}
+
+	public void setColorOne(int i){
+		this.colotOne = i;
 	}
 }

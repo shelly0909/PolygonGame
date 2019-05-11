@@ -25,6 +25,45 @@ public class InputFrame {
 			}
 		});
 		input.add(button);
+		JButton show = new JButton("best");
+		show.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				super.mouseClicked(e);
+				GameController.getInstance().createBest();
+			}
+		});
+		input.add(show);
+		JButton reset = new JButton("reset");
+		reset.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				super.mouseClicked(e);
+				GameController.getInstance().reset();
+			}
+		});
+		input.add(reset);
+
+		JButton history = new JButton("history");
+		history.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				super.mouseClicked(e);
+				GameController.getInstance().showHistoryWin();
+			}
+		});
+		input.add(history);
+
+		JButton clearHistory = new JButton("clearHistory");
+		clearHistory.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				super.mouseClicked(e);
+				GameController.getInstance().clearHis();
+			}
+		});
+		input.add(clearHistory);
+
 		return input;
 	}
 

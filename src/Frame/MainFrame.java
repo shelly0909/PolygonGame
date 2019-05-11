@@ -16,7 +16,7 @@ public class MainFrame extends JFrame {
 		InputFrame input = new InputFrame();
 		GameFrame game = new GameFrame();
 		JPanel inputPanel = input.init();// 输入面板
-		JPanel gamePanel = game.init();// 多边形面板
+		JPanel gamePanel = game.init(0);// 多边形面板
 		inputPanel.setVisible(true);
 		gamePanel.setVisible(true);
 
@@ -48,6 +48,7 @@ public class MainFrame extends JFrame {
 		// 初始化控制器
 		GameController controller = GameController.getInstance();
 		controller.init(gamePanel,null,game); // 传入
+		controller.CreatehistoryWin();
 
 		// 窗口初始化
 		setTitle(TITLE);
@@ -60,6 +61,5 @@ public class MainFrame extends JFrame {
 		setVisible(true);
 		// 设置窗口布局
 		setLayout(new BorderLayout());
-
 	}
 }

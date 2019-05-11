@@ -1,7 +1,12 @@
 package Manager;
 
 import Element.*;
+import Frame.BestFrame;
 import Frame.GameFrame;
+import Frame.HistoryFrame;
+import Frame.MainFrame;
+import com.sun.deploy.util.SyncAccess;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -13,8 +18,14 @@ public class GameController {
     private GameFrame gameFrame;
 
     private List<Polygon[]> steps;
+
     private List<JLine> removeLine;
     private int stepNum = 0;
+    private static HistoryFrame historyFrame;
+
+    private int[] Color;
+    private int his = 0;
+
 
     private static GameController controller;
 
@@ -25,6 +36,8 @@ public class GameController {
         steps = new ArrayList<>();
         removeLine = new ArrayList<>();
         steps.add(this.gameFrame.plss); // 初始状态
+        Color = new int[this.gameFrame.plss.length+1];
+        Color[0] = Color[1] = -1;
         stepNum++;
     }
 
@@ -36,7 +49,7 @@ public class GameController {
         return controller;
     }
 
-    public void deleteLine(JLine line) throws CloneNotSupportedException {
+    public void deleteLine(JLine line)  {
         Polygon[] tmp = gameFrame.manager.cloneArray(steps.get(stepNum-1)); // 注意深拷贝
 
         DrawEdge edge = tmp[0].edges;
@@ -55,6 +68,7 @@ public class GameController {
             gameFrame.plss = tmp;// 传值
             gamePanel.remove(line);
             removeLine.add(line);
+
             gamePanel.repaint();
         }else{
             int res;
@@ -67,8 +81,8 @@ public class GameController {
 
             DrawPoint tP = tmp[i].getEdges().getP2();
             if(tmp[(i+1)%tmp.length].edges!=null){
-                tmp[i].edges.getEdge().setOp(tmp[(i+1)%tmp.length].edges.getEdge().getOp());
-                tmp[i].edges.setP2(tmp[(i+1)%tmp.length].edges.getP2());
+                tmp[i].setEdges(tmp[(i+1)%tmp.length].edges);
+                tmp[i].edges.setP1(tmp[i].getPoints());
 
             }else{
                 tmp[i].edges=null;
@@ -80,6 +94,9 @@ public class GameController {
             for(int k=0;k<tmp.length-1;j++){
                 if(tmp[j].points.equals(tP)){
                     continue;
+                }else if(tmp[j].points.getPoint().getNum()==res){
+                    gameFrame.setColorOne(k);
+                    Color[stepNum] = k;
                 }
                 t1[k] = tmp[j];
                 k++;
@@ -90,8 +107,10 @@ public class GameController {
             removeLine.add(line);
             gameFrame.manager.calculateNewPos(t1,t1.length);
             gameFrame.reCalcalateLine();
+
             gamePanel.repaint();
         }
+        refreshHis(steps.get(steps.size()-1),stepNum,"点击");
         stepNum++;
     }
 
@@ -106,6 +125,51 @@ public class GameController {
         gamePanel.add(l);
         gameFrame.manager.calculateNewPos(gameFrame.plss,gameFrame.plss.length);
         gameFrame.reCalcalateLine();
+        gameFrame.setColorOne(Color[stepNum-1]);
         gamePanel.repaint();
+        refreshHis(gameFrame.plss,stepNum-1,"撤回");
     }
+
+    public void createBest(){
+        BestFrame bestFrame = new BestFrame();
+        bestFrame.initFrame();
+    }
+
+    public void reset(){
+        Polygon[] origin = steps.get(0);
+        steps.clear();
+        steps.add(origin);
+        for(int i=0;i<removeLine.size();i++){
+            gamePanel.add(removeLine.get(i));
+        }
+        removeLine.clear();
+        gameFrame.plss = origin;
+        gameFrame.manager.calculateNewPos(gameFrame.plss,gameFrame.plss.length);
+        gameFrame.reCalcalateLine();
+        gameFrame.setColorOne(-1);
+        gamePanel.repaint();
+        stepNum=1;
+    }
+
+    public void CreatehistoryWin(){
+        if(historyFrame == null){
+            historyFrame = new HistoryFrame();
+            historyFrame.initFrame();
+            historyFrame.setVisible(false);
+        }
+        historyFrame.addHis(steps.get(0),his++,-1,"初始");
+    }
+    public void showHistoryWin(){
+        historyFrame.setVisible(true);
+    }
+    public void refreshHis(Polygon[] plss,int i,String str){
+        if(historyFrame!=null)
+            historyFrame.addHis(plss,his++,Color[i],str);
+    }
+
+    public void clearHis(){
+        if(historyFrame!=null)
+            historyFrame.clearAll();
+    }
+
 }

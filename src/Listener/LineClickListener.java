@@ -13,11 +13,7 @@ public class LineClickListener extends MouseAdapter {
     public void mouseClicked(MouseEvent e) {
         super.mouseClicked(e);
         JLine jLine = (JLine)e.getSource();
-        try {
-            GameController.getInstance().deleteLine(jLine);
-        } catch (CloneNotSupportedException e1) {
-            e1.printStackTrace();
-        }
+        GameController.getInstance().deleteLine(jLine);
     }
 
     @Override

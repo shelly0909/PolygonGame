@@ -7,6 +7,7 @@ public class Point {
 	// 默认方法
 	public Point(int num) {
 		setNum(num);
+
 	}
 
 	public int getNum() {

@@ -1,0 +1,139 @@
+package Manager;
+
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public class BestSolution {
+
+    int[][][] m;// i,j的最值，0是最小,1是最大(两张表
+    int n ; // 顶点数
+    char[] op; // 符号数, 长度n,从1开始
+    int minf,maxf; // 主链最小值、最大值
+    int[][][] sPos;
+    List<Integer> route;
+
+
+    public BestSolution(int n,char[] op, int[] num){
+        this.n = n;
+        this.op = new char[n+1];
+        System.arraycopy(op,0,this.op,1,op.length);
+        this.m = new int[n+1][n+1][2];
+        route = new ArrayList<>();
+        // m矩阵填充
+        for(int k=0;k<2;k++){
+            for(int i=1;i<=n;i++){
+                for(int j=1;j<=n;j++){
+                    if(k==0)
+                        m[i][j][k] = Integer.MAX_VALUE;
+                    else
+                        m[i][j][k] = Integer.MIN_VALUE;
+                }
+            }
+        }
+
+        this.sPos = new int[n+1][n+1][2];
+        for(int i=0;i<n;i++){
+            // 初始化m,从1开始
+            this.m[i+1][1][0] =this.m[i+1][1][1] = num[i];
+        }
+
+    }
+
+    public int ployMax(){
+        // 生成i-j的最值表
+        for(int j=2;j<=n;j++){ // 从第二列开始
+            for(int i=1;i<=n;i++){
+                for(int s = 1;s<j;s++){
+                    minMax(i,s,j); // 找操作符在此处的最值
+                    if(m[i][j][0]>minf) {
+                        m[i][j][0]=minf; // 更新最小值和最大值,初始0
+                        sPos[i][j][0] = s; // 左子链长度
+                    }
+                    if(m[i][j][1]<maxf) {
+                        m[i][j][1]=maxf;
+                        sPos[i][j][1] = s;
+                    }
+                }
+            }
+        }
+        int tmp = m[1][n][1];
+        int b = 1;
+        for(int i=2;i<=n;i++){
+            // 找到从第i个顶点开始的最大值
+            if(tmp<m[i][n][1]) {
+                tmp = m[i][n][1];
+                b = i;
+            }
+        }
+
+        System.out.println("开始顶点为:"+b+",值:"+m[b][1][0]);
+        //printMatrix(sPos);
+
+
+        if(b-1==0){
+            route.add(n);
+        }else{
+            route.add(b-1);
+        }
+        getRoute(b,n);
+        return tmp;
+    }
+
+    public int getRoute(int i,int j){
+        if(j==1)
+            return m[i][j][1];
+        int left = getRoute(i,sPos[i][j][1]);
+        int r = (i+sPos[i][j][1] - 1)%n;
+        int right = getRoute(r+1,j-sPos[i][j][1]);
+        if(r==0) r=n;
+        System.out.println(left+" "+op[r]+" "+right);
+        route.add(r);
+        int result = 0;
+        if(op[r]=='+')
+            result = left+right;
+        else if(op[r]=='*')
+            result = left * right;
+        return result;
+    }
+
+    public void printMatrix(int[][][] tmp){
+        for(int k=0;k<2;k++){
+            for(int i=1;i<=n;i++){
+                for(int j=1;j<=n;j++){
+                    System.out.print(tmp[i][j][k]+" ");
+                }
+                System.out.println();
+            }
+            System.out.println();
+        }
+    }
+
+    public void minMax(int i,int s,int j){
+        int[] e = new int[5];
+        int  a = m[i][s][0],
+                b = m[i][s][1], // 左子链的最值
+                r = (i+s-1)%n ,// 多边形封闭，例(3,2,3),算的是从第3个顶点开始长度为3的主链的最值,i+s>n取模轮回去
+                c = m[r+1][j-s][0],
+                d = m[r+1][j-s][1]; // 右子链的最值
+        if(r==0) r=n;
+        //System.out.println("r:"+r);
+        if(op[r]=='+'){
+            minf = a+c;
+            maxf = b+d;
+        }else if(op[r]=='*'){
+            e[1] = a*c;
+            e[2] = a*d;
+            e[3] = b*c;
+            e[4] = b*d;
+            maxf =  minf = e[1];
+            for(int k=2;k<5;k++){
+                if(minf>e[k]) minf = e[k];
+                if(maxf<e[k]) maxf = e[k];
+            }
+        }
+    }
+
+
+}
