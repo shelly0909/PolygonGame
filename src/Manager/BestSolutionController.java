@@ -11,14 +11,17 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 最高分界面控制
+ */
 public class BestSolutionController {
-    private List<Polygon[]> BestSteps;
-    private List<JLine> BestRemoveLine;
+    private List<Polygon[]> BestSteps; // 最高分步骤
+    private List<JLine> BestRemoveLine; // 最高分移除的线
     private int stepNum = 0;
     private static BestSolutionController controller;
     private JPanel gamePanel;
     private GameFrame gameFrame;
-    private int[] ColorOne;
+    private int[] ColorOne; // 每步新计算的点的标志
 
     public void init(JPanel game, GameFrame gameFrame){
         this.gameFrame = gameFrame;
@@ -40,13 +43,17 @@ public class BestSolutionController {
         return controller;
     }
 
+    /**
+     * 计算最优解
+     */
     public void calBestSolution(){
         Polygon[] origin = BestSteps.get(0);
         int n = origin.length;
-        int[] num = new int[n];
+        long[] num = new long[n];
         char[] op = new char[n];
         int[] opIndex = new int[n];
 
+        // 界面的数据结构转换算法计算的数据结构
         for(int i=0;i<n;i++){
             int j = n-i-1;
             num[i] = origin[j].getPoints().getPoint().getNum();
@@ -66,26 +73,32 @@ public class BestSolutionController {
         for(int i=0;i<n;i++){
             System.out.print(op[i]+" ");
         }
-        BestSolution BS = new BestSolution(5,op,num);
+
+        // 测试性数据
+        BestSolution BS = new BestSolution(gameFrame.n,op,num);
         System.out.println(BS.ployMax());
         BS.printMatrix(BS.m);
-        BS.printMatrix(BS.sPos);
+        BS.printMatrixINT(BS.sPos);
 
-
+        // 获取最优解，产生步骤
         List<Integer> route = BS.route;
         for(int i=0;i<route.size();i++){
             int r = route.get(i);
-            System.out.println(r);
             deleteLine(BestSteps,opIndex[r-1]);
 
         }
-        System.out.println();
     }
 
+    /**
+     * 创建绘图步骤
+     * @param steps 步骤列表
+     * @param opIndex 最优解标志符
+     */
     public void deleteLine(List<Polygon[]> steps,int opIndex)  {
-
+        System.out.println(stepNum);
         Polygon[] tmp = gameFrame.manager.cloneArray(steps.get(stepNum-1)); // 注意深拷贝
 
+        // 找到最优解对应的列表对象
         int i = 0;
         int n = tmp.length;
         for(int j=0;j<tmp.length;j++){
@@ -94,6 +107,8 @@ public class BestSolutionController {
                 break;
             }
         }
+
+        // 找到最优解对应的线组件
         DrawEdge edge = tmp[i].edges;
         JLine line = null;
         for(int j=0;j<gameFrame.line.length;j++){
@@ -110,8 +125,9 @@ public class BestSolutionController {
             steps.add(tmp);
             BestRemoveLine.add(line);
         }else{
-//            if(stepNum==)
-            int res;
+
+            // 计算
+            long res;
             if(edge.getEdge().getOp()=='+'){
                 res = edge.getP1().getPoint().getNum() + edge.getP2().getPoint().getNum();
             }else{
@@ -119,18 +135,18 @@ public class BestSolutionController {
             }
             tmp[i].getPoints().getPoint().setNum(res);
 
+            // 处理新产生的边
             DrawPoint tP = tmp[i].getEdges().getP2();
             if(tmp[(i+1)%tmp.length].edges!=null){
-//                tmp[i].edges.getEdge().setOp(tmp[(i+1)%tmp.length].edges.getEdge().getOp());
-//                tmp[i].edges.setP2(tmp[(i+1)%tmp.length].edges.getP2());
                 tmp[i].setEdges(tmp[(i+1)%tmp.length].edges);
                 tmp[i].edges.setP1(tmp[i].getPoints());
 
             }else{
+                // 如果当前对应的边为空则不处理
                 tmp[i].edges=null;
             }
 
-
+            // 储存步骤，存储新计算值位置
             Polygon[] t1 = new Polygon[tmp.length-1];
             int j=0;
             for(int k=0;k<tmp.length-1;j++){
@@ -144,36 +160,43 @@ public class BestSolutionController {
             }
             steps.add(t1);
             BestRemoveLine.add(line);
-//            gameFrame.manager.calculateNewPos(t1,t1.length);
 
         }
         stepNum++;
     }
 
+    /**
+     * 显示一步最优解
+     */
     public void showBestSolution()  {
-        gameFrame.plss = BestSteps.get(stepNum);
-        gamePanel.remove(BestRemoveLine.get(stepNum-1));
+        gameFrame.plss = BestSteps.get(stepNum); // 更换数据
+        gamePanel.remove(BestRemoveLine.get(stepNum-1)); // 移除线组件
+        // 重新计算位置
         gameFrame.manager.calculateNewPos(gameFrame.plss,gameFrame.plss.length);
         gameFrame.reCalcalateLine();
         gameFrame.setColorOne(ColorOne[stepNum]);
         gamePanel.repaint();
 
         stepNum++;
-        System.out.println("show-num:"+stepNum);
     }
 
+    /**
+     * 历史记录上一步
+     */
     public void recall(){
         if(stepNum==1)
             return;
         stepNum--;
+        // 获取步骤
         BestSteps.get(stepNum-1);
         gameFrame.plss = BestSteps.get(stepNum-1);
         JLine l = BestRemoveLine.get(stepNum-1);
         gamePanel.add(l);
+
+        // 重新计算位置
         gameFrame.manager.calculateNewPos(gameFrame.plss,gameFrame.plss.length);
         gameFrame.reCalcalateLine();
         gameFrame.setColorOne(ColorOne[stepNum-1]);
         gamePanel.repaint();
-        System.out.println("recall-num:"+stepNum);
     }
 }

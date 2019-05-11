@@ -1,23 +1,35 @@
 package Frame;
 
+import Element.Polygon;
 import Manager.BestSolution;
 import Manager.BestSolutionController;
 import Manager.GameController;
+import Manager.PolygonManager;
 
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * 最高分数界面
+ */
 public class BestFrame extends JFrame {
     public static final String TITLE = "算法分析与设计三级项目";// 窗口名
     public static final int WIDTH = 800;// 窗口长度
     public static final int HEIGHT = 600;// 窗口宽度
     public static final int MARGIN = 50;// 窗口宽度
 
-    public void initFrame(){
+
+    /**
+     * 初始化界面
+     */
+    public void initFrame(Polygon[] data, PolygonManager pm){
         BestInputPanel input = new BestInputPanel();
         GameFrame game = new GameFrame();
+        game.receiveData(data,pm);
         JPanel inputPanel = input.init();// 输入面板
         JPanel gamePanel = game.init(1);// 多边形面板
+
+
         inputPanel.setVisible(true);
         gamePanel.setVisible(true);
 
@@ -53,8 +65,6 @@ public class BestFrame extends JFrame {
         // 窗口初始化
         setTitle(TITLE);
         setSize(WIDTH, HEIGHT);
-        // 设置窗口关闭按钮的默认操作(点击关闭时退出进程)
-//        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         // 把窗口位置设置到屏幕的中心
         setLocationRelativeTo(null);
         // 设置窗口可见

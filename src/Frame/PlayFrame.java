@@ -6,7 +6,6 @@ import javax.swing.*;
 public class PlayFrame {
 	public static void main(String[] arg) {
 		MainFrame play = new MainFrame();
-//		play.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE); // 不一起关闭
 		play.initFrame();
 	}
 

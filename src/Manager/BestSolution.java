@@ -7,19 +7,25 @@ import java.util.List;
 
 public class BestSolution {
 
-    int[][][] m;// i,j的最值，0是最小,1是最大(两张表
+    long[][][] m;// i,j的最值，0是最小,1是最大(两张表
     int n ; // 顶点数
     char[] op; // 符号数, 长度n,从1开始
-    int minf,maxf; // 主链最小值、最大值
+    long minf,maxf; // 主链最小值、最大值
     int[][][] sPos;
     List<Integer> route;
 
 
-    public BestSolution(int n,char[] op, int[] num){
+    /**
+     * 初始化
+     * @param n 元素长度
+     * @param op 操作符数组
+     * @param num 节点数组
+     */
+    public BestSolution(int n,char[] op, long[] num){
         this.n = n;
         this.op = new char[n+1];
         System.arraycopy(op,0,this.op,1,op.length);
-        this.m = new int[n+1][n+1][2];
+        this.m = new long[n+1][n+1][2];
         route = new ArrayList<>();
         // m矩阵填充
         for(int k=0;k<2;k++){
@@ -41,7 +47,7 @@ public class BestSolution {
 
     }
 
-    public int ployMax(){
+    public long ployMax(){
         // 生成i-j的最值表
         for(int j=2;j<=n;j++){ // 从第二列开始
             for(int i=1;i<=n;i++){
@@ -58,7 +64,7 @@ public class BestSolution {
                 }
             }
         }
-        int tmp = m[1][n][1];
+        long tmp = m[1][n][1];
         int b = 1;
         for(int i=2;i<=n;i++){
             // 找到从第i个顶点开始的最大值
@@ -81,16 +87,22 @@ public class BestSolution {
         return tmp;
     }
 
-    public int getRoute(int i,int j){
+    /**
+     * 递归求从第i个开始长度为j的序列的路径
+     * @param i 第i个元素
+     * @param j 长度为j
+     * @return 点击的操作符
+     */
+    public long getRoute(int i,int j){
         if(j==1)
             return m[i][j][1];
-        int left = getRoute(i,sPos[i][j][1]);
+        long left = getRoute(i,sPos[i][j][1]);
         int r = (i+sPos[i][j][1] - 1)%n;
-        int right = getRoute(r+1,j-sPos[i][j][1]);
+        long right = getRoute(r+1,j-sPos[i][j][1]);
         if(r==0) r=n;
-        System.out.println(left+" "+op[r]+" "+right);
+//        System.out.println(left+" "+op[r]+" "+right);
         route.add(r);
-        int result = 0;
+        long result = 0;
         if(op[r]=='+')
             result = left+right;
         else if(op[r]=='*')
@@ -98,7 +110,11 @@ public class BestSolution {
         return result;
     }
 
-    public void printMatrix(int[][][] tmp){
+    /**
+     * 打印三维数组
+     * @param tmp 目标数组
+     */
+    public void printMatrix(long[][][] tmp){
         for(int k=0;k<2;k++){
             for(int i=1;i<=n;i++){
                 for(int j=1;j<=n;j++){
@@ -109,12 +125,28 @@ public class BestSolution {
             System.out.println();
         }
     }
-
+    public void printMatrixINT(int[][][] tmp){
+        for(int k=0;k<2;k++){
+            for(int i=1;i<=n;i++){
+                for(int j=1;j<=n;j++){
+                    System.out.print(tmp[i][j][k]+" ");
+                }
+                System.out.println();
+            }
+            System.out.println();
+        }
+    }
+    /**
+     * 找出以第i个元素的长度为j的序列在s处中断的最值
+     * @param i 第i个元素
+     * @param s 中断位置
+     * @param j 长度为j
+     */
     public void minMax(int i,int s,int j){
-        int[] e = new int[5];
-        int  a = m[i][s][0],
+        long[] e = new long[5];
+         int    r = (i+s-1)%n ;// 多边形封闭，例(3,2,3),算的是从第3个顶点开始长度为3的主链的最值,i+s>n取模轮回去
+        long  a = m[i][s][0],
                 b = m[i][s][1], // 左子链的最值
-                r = (i+s-1)%n ,// 多边形封闭，例(3,2,3),算的是从第3个顶点开始长度为3的主链的最值,i+s>n取模轮回去
                 c = m[r+1][j-s][0],
                 d = m[r+1][j-s][1]; // 右子链的最值
         if(r==0) r=n;

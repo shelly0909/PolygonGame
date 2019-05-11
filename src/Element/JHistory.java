@@ -10,7 +10,7 @@ public class JHistory extends JLabel {
     public JHistory(Polygon[] plss,int ColorOne){
         this.plss = plss;
         this.ColorOne = ColorOne;
-        this.setBorder(BorderFactory.createLineBorder(Color.red));
+        this.setBorder(BorderFactory.createLineBorder(Color.red)); // 边框
     }
 
     @Override
@@ -35,7 +35,7 @@ public class JHistory extends JLabel {
             //写上端点对应的数值
             g.drawString(""+plss[i].getPoints().getPoint().getNum(),x-5,y+10);
             g.setColor(Color.decode("#0A122A"));
-            if(plss[i].edges==null)
+            if(plss[i].edges==null) // 没有边则跳过
                 continue;
             //设置线条的粗细
             g.setStroke(new BasicStroke(2));

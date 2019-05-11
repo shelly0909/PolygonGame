@@ -13,7 +13,7 @@ public class LineClickListener extends MouseAdapter {
     public void mouseClicked(MouseEvent e) {
         super.mouseClicked(e);
         JLine jLine = (JLine)e.getSource();
-        GameController.getInstance().deleteLine(jLine);
+        GameController.getInstance().deleteLine(jLine); // 线的点击事件
     }
 
     @Override

@@ -26,14 +26,15 @@ public class PolygonManager {
 		 y0 = (height - 2 * margin) / 2;
 		 r = (width - 4 * margin) / 2;// 正多边形圆的半径
 		 degree = 360.0 / n;// 圆心角
-
+		n=11;
 		Polygon[] pls;
 		pls = new Polygon[n];
 
 //		char[] op = new PolygonManager().opRandom(n);// 边的符号赋值
 //		int[] num = new PolygonManager().numRandom(n);// 边的数值赋值
-		int num[]= {28, 74, 27, 94, 31};
-		char[] op = {'+','+','+','*','+'};
+		// 测试用数据
+		int num[]= {16,32, 10, 35, 37, 36, 32, -5, -1, 30, 16 };
+		char[] op = {'+','+','*','*','+','*','*','+','*','+','*'};
 
 		// 对象都初始化好，不然会报错
 		Edge[] edges;
@@ -144,11 +145,13 @@ public class PolygonManager {
 
 	// 随机生成各个端点数值
 	public int[] numRandom(int n) {
+		int max =40;
+		int min =-10;
 		int[] num;
 		num = new int[n];
 		for (int i = 0; i < n; i++) {
 			Random ran = new Random();
-			num[i] = ran.nextInt(100);
+			num[i] = ran.nextInt(max-min)+min;
 		}
 		return num;
 	}

@@ -2,19 +2,19 @@ package Element;
 
 //这个是每一个点
 public class Point {
-	private int num; // 端点数值
+	private long num; // 端点数值
 
 	// 默认方法
-	public Point(int num) {
+	public Point(long num) {
 		setNum(num);
 
 	}
 
-	public int getNum() {
+	public long getNum() {
 		return num;
 	}
 
-	public void setNum(int num) {
+	public void setNum(long num) {
 		this.num = num;
 	}
 }

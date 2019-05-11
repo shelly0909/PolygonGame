@@ -2,7 +2,7 @@ package Element;
 
 //这个是每一条边
 public class Edge {
-	private int index;
+	private int index; // 唯一标志符
 	private char op;// 边的运算符号
 
 	// 默认方法
