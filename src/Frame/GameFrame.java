@@ -28,10 +28,18 @@ public class GameFrame{
 		PolygonManager pm = new PolygonManager();
 		Random ran = new Random();
 		n = ran.nextInt(16)+2; // 范围大于3
-		n = 11;
-		plss = pm.polygonData(n);
+		plss = pm.polygonData(n,null,null);
 		this.manager = pm;
 	}
+
+	public void InputData(int n,int[] num,char[] op){
+		// 获取具体绘制的位置数据
+		PolygonManager pm = new PolygonManager();
+		this.n = n;
+		plss = pm.polygonData(n,num,op);
+		this.manager = pm;
+	}
+
 	public void receiveData(Polygon[] p,PolygonManager pm){
 		this.plss = p;
 		this.n = p.length;

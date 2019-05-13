@@ -6,7 +6,8 @@ import javax.swing.*;
 public class PlayFrame {
 	public static void main(String[] arg) {
 		MainFrame play = new MainFrame();
-		play.initFrame();
+		play.beforeStartUp();
+//		play.initFrame();
 	}
 
 }

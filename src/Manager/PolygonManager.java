@@ -14,7 +14,7 @@ public class PolygonManager {
 	int y0;
 	int r;
 	double degree;
-	public Polygon[] polygonData(int n) {
+	public Polygon[] polygonData(int n,int[] numData,char[] opData) {
 
 
 		// 如何计算正多边形的端点位置
@@ -26,15 +26,22 @@ public class PolygonManager {
 		 y0 = (height - 2 * margin) / 2;
 		 r = (width - 4 * margin) / 2;// 正多边形圆的半径
 		 degree = 360.0 / n;// 圆心角
-		n=11;
 		Polygon[] pls;
 		pls = new Polygon[n];
-
+		char[] op;
+		int[] num;
+		if(numData==null){
+			op = new PolygonManager().opRandom(n);// 边的符号赋值
+			num = new PolygonManager().numRandom(n);// 边的数值赋值
+		}else{
+			op = opData;
+			num = numData;
+		}
 //		char[] op = new PolygonManager().opRandom(n);// 边的符号赋值
 //		int[] num = new PolygonManager().numRandom(n);// 边的数值赋值
 		// 测试用数据
-		int num[]= {16,32, 10, 35, 37, 36, 32, -5, -1, 30, 16 };
-		char[] op = {'+','+','*','*','+','*','*','+','*','+','*'};
+//		int num[]= {16,32, 10, 35, 37, 36, 32, -5, -1, 30, 16 };
+//		char[] op = {'+','+','*','*','+','*','*','+','*','+','*'};
 
 		// 对象都初始化好，不然会报错
 		Edge[] edges;
