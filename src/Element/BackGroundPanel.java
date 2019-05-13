@@ -3,6 +3,9 @@ package Element;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * 创建带背景的Panel
+ */
 public class BackGroundPanel extends JPanel{
     public String imgURL = "";
 

@@ -53,7 +53,7 @@ public class HistoryFrame extends JFrame {
         his.setText("步骤"+i+":"+str);
         his.setVerticalAlignment(SwingConstants.TOP); // 设置左上角
         his.setBounds(0,WIDTH*history.size(),WIDTH,WIDTH); // 设置新纪录位置
-
+        his.setBorder(BorderFactory.createLineBorder(Color.red)); // 边框
         // 控制滚动条
         hisPanel.setPreferredSize(new Dimension(WIDTH,WIDTH*(history.size()+1)));
         bar.setValue(hisPanel.getHeight());

@@ -1,5 +1,6 @@
 package Manager;
 
+import java.math.BigInteger;
 import java.util.*;
 
 import Element.*;
@@ -37,6 +38,11 @@ public class PolygonManager {
 			op = opData;
 			num = numData;
 		}
+		BigInteger[] tmp = new BigInteger[n];
+		for(int i=0;i<n;i++){
+			tmp[i] = new BigInteger(String.valueOf(num[i]));
+		}
+		BestSolutionController.getInstance().getBestResult(tmp,op,n); // 计算最优解
 //		char[] op = new PolygonManager().opRandom(n);// 边的符号赋值
 //		int[] num = new PolygonManager().numRandom(n);// 边的数值赋值
 		// 测试用数据
@@ -59,7 +65,7 @@ public class PolygonManager {
 		}
 		// 点数初始化
 		for (int i = 0; i < n; i++) {
-			points[i] = new Point(num[i]);
+			points[i] = new Point(new BigInteger(String.valueOf(num[i])));
 		}
 
 		// 根据输入的端点数值计算具体边和端点的位置

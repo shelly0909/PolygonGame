@@ -59,7 +59,6 @@ public class BestFrame extends JFrame {
         add(bottom, BorderLayout.SOUTH);
 
         // 初始化控制器
-        BestSolutionController.getInstance();
         BestSolutionController.getInstance().init(gamePanel,game);
 
         // 窗口初始化

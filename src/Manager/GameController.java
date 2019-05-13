@@ -1,16 +1,11 @@
 package Manager;
 
 import Element.*;
-import Frame.BestFrame;
-import Frame.GameFrame;
-import Frame.HistoryFrame;
-import Frame.MainFrame;
-import com.sun.deploy.util.SyncAccess;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
+import Frame.*;
 
 import javax.swing.*;
+import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -19,6 +14,7 @@ import java.util.List;
 public class GameController {
     private JPanel gamePanel;
     private GameFrame gameFrame;
+    private InputFrame inputFrame;
 
     private List<Polygon[]> steps; // 每一步记录
     private List<JLine> removeLine; // 记录对应的移除线记录
@@ -31,7 +27,8 @@ public class GameController {
     private static GameController controller; // 单例
     private JLine line;
 
-    public void init(JPanel game,GameFrame gameFrame){
+    public void init(JPanel game,GameFrame gameFrame,InputFrame inputFrame){
+        this.inputFrame = inputFrame;
         this.gamePanel = game;
         this.gameFrame = gameFrame;
         steps = new ArrayList<>();
@@ -80,11 +77,11 @@ public class GameController {
             gamePanel.repaint();
         }else{
             // 计算结果
-            long res;
+            BigInteger res;
             if(edge.getEdge().getOp()=='+'){
-                res = edge.getP1().getPoint().getNum() + edge.getP2().getPoint().getNum();
+                res = edge.getP1().getPoint().getNum().add(edge.getP2().getPoint().getNum());
             }else{
-                res = edge.getP1().getPoint().getNum() * edge.getP2().getPoint().getNum();
+                res = edge.getP1().getPoint().getNum().multiply(edge.getP2().getPoint().getNum());
             }
             tmp[i].getPoints().getPoint().setNum(res);
 
@@ -122,6 +119,9 @@ public class GameController {
         }
         // 新增历史记录
         refreshHis(steps.get(steps.size()-1),stepNum,"点击");
+        if(stepNum==steps.get(0).length){
+            finishGame(steps.get(stepNum)[0].getPoints().getPoint().getNum());
+        }
         stepNum++;
     }
 
@@ -223,4 +223,19 @@ public class GameController {
             historyFrame.clearAll();
     }
 
+    /**
+     * 结束游戏
+     * @param playScore 当前玩家玩的分数
+     */
+    public void finishGame(BigInteger playScore){
+        BigInteger result = BestSolutionController.getInstance().getResult();
+        JLabel label = new JLabel();
+        label.setText("你的分数是:"+playScore.toString()
+                +"\n最优解为:"+result);
+        // 允许用户查看最高分数，禁止撤回和重置
+        inputFrame.getInputPanel().add(label);
+        inputFrame.setBestVisible(true);
+        inputFrame.setrecallEnable(false);
+        inputFrame.setResetEnable(false);
+    }
 }

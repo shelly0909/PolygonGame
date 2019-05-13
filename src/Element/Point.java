@@ -1,20 +1,22 @@
 package Element;
 
+import java.math.BigInteger;
+
 //这个是每一个点
 public class Point {
-	private long num; // 端点数值
+	private BigInteger num; // 端点数值
 
 	// 默认方法
-	public Point(long num) {
+	public Point(BigInteger num) {
 		setNum(num);
 
 	}
 
-	public long getNum() {
+	public BigInteger getNum() {
 		return num;
 	}
 
-	public void setNum(long num) {
+	public void setNum(BigInteger num) {
 		this.num = num;
 	}
 }

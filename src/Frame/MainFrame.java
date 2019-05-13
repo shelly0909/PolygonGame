@@ -23,8 +23,11 @@ public class MainFrame extends JFrame {
 	public JPanel inputNumPanel;
 	public JPanel TipsPanel;
 
+	private InputFrame inputFrame;
 
-
+	/**
+	 * 初始化界面
+	 */
 	public void beforeStartUp(){
 		// 窗口初始化
 		setTitle(TITLE);
@@ -40,6 +43,7 @@ public class MainFrame extends JFrame {
 		Welcome. setLocation(250,210);
 		Welcome.setFont( new Font("楷体",1,30));
 		Welcome.setForeground(Color.PINK);
+
 		JButton btn_start = new JButton("开始游戏");
 		btn_start.setSize(160, 50);
 		btn_start.setLocation(300, 300);
@@ -51,6 +55,8 @@ public class MainFrame extends JFrame {
 				choose();
 			}
 		});
+
+		// 创建面板
 		beforePanel = new BackGroundPanel("src/bg/polygon.jpg");
 		beforePanel.add(Welcome);
 		beforePanel.add(btn_start);
@@ -61,6 +67,9 @@ public class MainFrame extends JFrame {
 		setVisible(true);
 	}
 
+	/**
+	 * 选择随机产生或是自定义模式
+	 */
 	public void choose(){
 		beforePanel.removeAll();
 		SwingUtilities.updateComponentTreeUI(this);
@@ -82,9 +91,9 @@ public class MainFrame extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				super.mouseClicked(e);
 				// 随机生成
-				initLabel();
-				initInput(RANDOMMODE);
-				initGamePanel(RANDOMMODE,null,null);
+				initLabel(); // 初始化上下标签
+				initInput(RANDOMMODE); // 初始化交互界面
+				initGamePanel(RANDOMMODE,null,null); // 初始化游戏面板
 			}
 		});
 
@@ -92,14 +101,17 @@ public class MainFrame extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				super.mouseClicked(e);
-				initLabel();
-				iniTipsPanel();
-				initInput(INPUTMODE);
+				initLabel(); // 初始化上下标签
+				iniTipsPanel(); // 初始化提示面板
+				initInput(INPUTMODE); // 初始化输入面板
 			}
 		});
 	}
 
 
+	/**
+	 * 初始化上下标签
+	 */
 	public void initLabel(){
 		this.remove(beforePanel);
 		SwingUtilities.updateComponentTreeUI(this);
@@ -127,9 +139,15 @@ public class MainFrame extends JFrame {
 		add(bottom, BorderLayout.SOUTH);
 	}
 
+	/**
+	 * 初始化游戏面板
+	 * @param mode 数据接受模式，随机或是自定义
+	 * @param num 自定义模式传入节点数组，随机模式下置null
+	 * @param op 自定义模式下传入操作符数据，随机模式下置null
+	 */
 	public void initGamePanel(int mode,int[] num,char[] op){
 		GameFrame game = new GameFrame();
-		if(mode==RANDOMMODE)
+		if(mode==RANDOMMODE) // 判断数据接受方式
 			game.randomData();
 		else{
 			game.InputData(num.length,num,op);
@@ -139,16 +157,20 @@ public class MainFrame extends JFrame {
 		add(gamePanel, BorderLayout.WEST);
 		// 初始化控制器
 		GameController controller = GameController.getInstance();
-		controller.init(gamePanel,game); // 传入
+		controller.init(gamePanel,game,inputFrame); // 传入
 		controller.CreatehistoryWin(); // 初始化历史记录
 	}
 
+	/**
+	 * 初始化输入界面
+	 * @param mode 游戏模式创建交互界面，输入模式创建输入界面
+	 */
 	public void initInput(int mode) {
 		if(mode ==RANDOMMODE){
 			InputFrame input = new InputFrame();
 			inputNumPanel = input.init();// 输入面板
 			inputNumPanel.setVisible(true);
-
+			this.inputFrame = input;
 			// 添加控件
 			add(inputNumPanel, BorderLayout.EAST);
 		}else if(mode ==INPUTMODE){
@@ -162,19 +184,33 @@ public class MainFrame extends JFrame {
 		this.repaint();
 	}
 
+	/**
+	 * 初始化提示面板
+	 */
 	public void iniTipsPanel(){
 		TipsPanel = new JPanel();
 		TipsPanel.setLayout(null);
 		TipsPanel.setPreferredSize(new Dimension(450,450));
-		JLabel label = new JLabel("请输入");
+		JLabel label = new JLabel("<html><body>请输入n，节点及操作符<br/>各节点和操作符之间用英文,分割<br/>" +
+				"节点和操作符的关系为：<br/>节点1，节点2...<br/>节点1顺时针的操作符，节点2顺时针的操作符<br/></body></html>");
 		label.setBounds(0,0,400,400);
 		TipsPanel.add(label);
 		add(TipsPanel, BorderLayout.WEST);
 	}
 
+	/**
+	 * 预览当前输入的界面
+	 * @param n 节点个数
+	 * @param num 节点数组
+	 * @param op 操作符数组
+	 */
 	public void preview(int n,int[] num,char[] op){
 		JLabel label  =(JLabel) TipsPanel.getComponent(0);
 		label.setText("");
+		// 如果存在前一个预览，则删除
+		if(TipsPanel.getComponentCount()==2){
+			TipsPanel.remove(1);
+		}
 		PolygonManager pm = new PolygonManager();
 		JHistory history = new JHistory(pm.polygonData(n,num,op),-1);
 		history.setBounds(0,0,450,450);
@@ -182,6 +218,12 @@ public class MainFrame extends JFrame {
 		TipsPanel.repaint();
 	}
 
+	/**
+	 * 输入模式下创建游戏
+	 * @param n 结点数
+	 * @param num 节点数组
+	 * @param op 操作数组
+	 */
 	public void createGame(int n,int[] num,char[] op){
 		this.remove(TipsPanel);
 		this.remove(inputNumPanel);

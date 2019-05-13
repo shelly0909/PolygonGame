@@ -8,6 +8,7 @@ import Frame.GameFrame;
 import Frame.PlayFrame;
 
 import javax.swing.*;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +23,9 @@ public class BestSolutionController {
     private JPanel gamePanel;
     private GameFrame gameFrame;
     private int[] ColorOne; // 每步新计算的点的标志
+
+    private BigInteger result;
+
 
     public void init(JPanel game, GameFrame gameFrame){
         this.gameFrame = gameFrame;
@@ -46,14 +50,14 @@ public class BestSolutionController {
     /**
      * 计算最优解
      */
-    public void calBestSolution(){
+    private void calBestSolution(){
         Polygon[] origin = BestSteps.get(0);
         int n = origin.length;
-        long[] num = new long[n];
+        BigInteger[] num = new BigInteger[n];
         char[] op = new char[n];
         int[] opIndex = new int[n];
 
-        // 界面的数据结构转换算法计算的数据结构
+//        // 界面的数据结构转换算法计算的数据结构
         for(int i=0;i<n;i++){
             int j = n-i-1;
             num[i] = origin[j].getPoints().getPoint().getNum();
@@ -66,19 +70,19 @@ public class BestSolutionController {
             }
 
         }
-        for(int i=0;i<n;i++){
-            System.out.print(num[i]+" ");
-        }
-        System.out.println();
-        for(int i=0;i<n;i++){
-            System.out.print(op[i]+" ");
-        }
+//        for(int i=0;i<n;i++){
+//            System.out.print(num[i]+" ");
+//        }
+//        System.out.println();
+//        for(int i=0;i<n;i++){
+//            System.out.print(op[i]+" ");
+//        }
 
         // 测试性数据
-        BestSolution BS = new BestSolution(gameFrame.n,op,num);
-        System.out.println(BS.ployMax());
-        BS.printMatrix(BS.m);
-        BS.printMatrixINT(BS.sPos);
+        BestSolution BS = new BestSolution(n,op,num);
+        BS.ployMax();
+//        BS.printMatrix(BS.m);
+//        BS.printMatrixINT(BS.sPos);
 
         // 获取最优解，产生步骤
         List<Integer> route = BS.route;
@@ -94,9 +98,9 @@ public class BestSolutionController {
      * @param steps 步骤列表
      * @param opIndex 最优解标志符
      */
-    public void deleteLine(List<Polygon[]> steps,int opIndex)  {
+    private void deleteLine(List<Polygon[]> steps,int opIndex)  {
         System.out.println(stepNum);
-        Polygon[] tmp = gameFrame.manager.cloneArray(steps.get(stepNum-1)); // 注意深拷贝
+        Polygon[] tmp =gameFrame.manager.cloneArray(steps.get(stepNum-1)); // 注意深拷贝
 
         // 找到最优解对应的列表对象
         int i = 0;
@@ -127,11 +131,11 @@ public class BestSolutionController {
         }else{
 
             // 计算
-            long res;
+            BigInteger res;
             if(edge.getEdge().getOp()=='+'){
-                res = edge.getP1().getPoint().getNum() + edge.getP2().getPoint().getNum();
+                res = edge.getP1().getPoint().getNum().add(edge.getP2().getPoint().getNum());
             }else{
-                res = edge.getP1().getPoint().getNum() * edge.getP2().getPoint().getNum();
+                res = edge.getP1().getPoint().getNum().multiply(edge.getP2().getPoint().getNum());
             }
             tmp[i].getPoints().getPoint().setNum(res);
 
@@ -152,7 +156,7 @@ public class BestSolutionController {
             for(int k=0;k<tmp.length-1;j++){
                 if(tmp[j].points.equals(tP)){
                     continue;
-                }else if(tmp[j].points.getPoint().getNum()==res){
+                }else if(tmp[j].points.getPoint().getNum().compareTo(res)==0){
                     ColorOne[stepNum] = k;
                 }
                 t1[k] = tmp[j];
@@ -198,5 +202,20 @@ public class BestSolutionController {
         gameFrame.reCalcalateLine();
         gameFrame.setColorOne(ColorOne[stepNum-1]);
         gamePanel.repaint();
+    }
+
+    /**
+     * 仅计算最佳结果
+     * @param num 节点数组
+     * @param op 操作符数组
+     * @param n 节点数
+     */
+    public void getBestResult(BigInteger[] num,char[] op,int n){
+        BestSolution bs = new BestSolution(n,op,num);
+        result = bs.ployMax();
+    }
+
+    public BigInteger getResult() {
+        return result;
     }
 }

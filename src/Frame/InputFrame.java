@@ -11,36 +11,42 @@ import java.awt.event.MouseEvent;
 public class InputFrame {
 	private int width = 300;
 	private int height = 500;
+	private JButton showBest; // 显示最高分
+	private JButton recall; // 撤回
+	private JButton reset; // 重置按钮
+	private JPanel inputPanel; // 创建的输入面板
 
 	public JPanel init() {
 		JPanel input = new JPanel();
+		this.inputPanel = input;
 		input.setPreferredSize(new Dimension(width, height));
 		input.setBackground(Color.decode("#F18F01"));
 
 		// 撤回按钮
-		JButton button = new JButton("撤回");
-		button.addMouseListener(new MouseAdapter() {
+		recall = new JButton("撤回");
+		recall.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				super.mouseClicked(e);
 				GameController.getInstance().recall();
 			}
 		});
+		input.add(recall);
 
 		// 查看最高分按钮
-		input.add(button);
-		JButton show = new JButton("best");
-		show.addMouseListener(new MouseAdapter() {
+		showBest = new JButton("best");
+		showBest.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				super.mouseClicked(e);
 				GameController.getInstance().createBest();
 			}
 		});
+		showBest.setVisible(false);
+		input.add(showBest);
 
 		// 重置按钮
-		input.add(show);
-		JButton reset = new JButton("reset");
+		 reset = new JButton("reset");
 		reset.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -75,4 +81,18 @@ public class InputFrame {
 		return input;
 	}
 
+	public void setBestVisible(boolean flag){
+		showBest.setVisible(flag);
+	}
+
+	public JPanel getInputPanel() {
+		return inputPanel;
+	}
+
+	public void setrecallEnable(boolean flag){
+		recall.setEnabled(flag);
+	}
+	public void setResetEnable(boolean flag){
+		reset.setEnabled(flag);
+	}
 }

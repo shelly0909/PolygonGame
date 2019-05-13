@@ -32,6 +32,12 @@ public class GameFrame{
 		this.manager = pm;
 	}
 
+	/**
+	 * 自定义模式下的输入
+	 * @param n 节点个数
+	 * @param num 节点数组
+	 * @param op 操作符数组
+	 */
 	public void InputData(int n,int[] num,char[] op){
 		// 获取具体绘制的位置数据
 		PolygonManager pm = new PolygonManager();
@@ -40,14 +46,25 @@ public class GameFrame{
 		this.manager = pm;
 	}
 
+	/**
+	 * best界面传入数据
+	 * @param p  多边形数组
+	 * @param pm 数据处理器
+	 */
 	public void receiveData(Polygon[] p,PolygonManager pm){
 		this.plss = p;
 		this.n = p.length;
 		this.manager = pm;
 	}
+
+	/**
+	 * 界面初始化
+	 * @param mode 创建gameFrame的模式
+	 * @return gameFrame的JPanel
+	 */
 	public JPanel init(int mode) {
 		this.mode = mode;
-		System.out.println("n:"+n);
+		System.out.println("nInput:"+n);
 		int length = plss.length;
 		for (int i = 0; i < length; i++) {
 			plss[i] = new Polygon(plss[i].getEdges(), plss[i].getPoints());
@@ -112,8 +129,6 @@ public class GameFrame{
 			// 计算线所在区域的左上角和右下角点
 			DrawPoint[] tPoint = rebuildPoint(plss[i].getEdges().getP1(),plss[i].getEdges().getP2());
 //			// 防区域交叉
-//				tPoint[0].setX(tPoint[0].getX()+r);
-//				tPoint[0].setY(tPoint[0].getY()+r);
 			tPoint[0].setX(tPoint[0].getX()+r);
 			tPoint[0].setY(tPoint[0].getY()+r);
 			// 创建组件
@@ -122,8 +137,6 @@ public class GameFrame{
 			int width = tPoint[1].getX()-tPoint[0].getX()>10 ? tPoint[1].getX()-tPoint[0].getX():20;
 			int height = tPoint[1].getY()-tPoint[0].getY()>10?tPoint[1].getY()-tPoint[0].getY():20;
 			// 仅有一条线时设置线相对点击区域的偏移量
-//			if(width==20 || height==20)
-//				line[i].offset=10;
 			if(tPoint[1].getX()-tPoint[0].getX()<3||tPoint[1].getY()-tPoint[0].getY()<3){
 				line[i].offset=10;
 			}
@@ -149,8 +162,6 @@ public class GameFrame{
 					// 找处于显示状态的线组件
 					if(plss[j].edges!=null && plss[j].edges.getEdge().getIndex()==line[i].i.getEdge().getIndex()){
 						DrawPoint[] tPoint = rebuildPoint(plss[j].getEdges().getP1(),plss[j].getEdges().getP2());
-//						if(plss[j].edges.getP1().getPoint().getNum()==30 ||plss[j].edges.getP1().getPoint().getNum()==-1){
-//							System.out.println();
 							tPoint[0].setX(tPoint[0].getX()+r);
 							tPoint[0].setY(tPoint[0].getY()+r);
 
@@ -163,8 +174,6 @@ public class GameFrame{
 						// 计算区域大小
 						int width = tPoint[1].getX()-tPoint[0].getX()>10 ? tPoint[1].getX()-tPoint[0].getX():20;
 						int height = tPoint[1].getY()-tPoint[0].getY()>10?tPoint[1].getY()-tPoint[0].getY():20;
-//						if(width==20 || height==20)
-//							line[i].offset=10;
 
 						if(tPoint[1].getX()-tPoint[0].getX()<3||tPoint[1].getY()-tPoint[0].getY()<3){
 							line[i].offset=10;
