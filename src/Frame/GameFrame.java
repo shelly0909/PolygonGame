@@ -93,6 +93,10 @@ public class GameFrame{
 					int y=plss[i].getPoints().getY();
 					//画端点圆
 					g.fillOval(x-15,y-15,40,40);
+//					g.setColor(Color.BLACK);
+//					g.fillOval(x-15,y-15,5,5);
+//					g.setColor(Color.red);
+//					g.fillOval(x,y,5,5);
 
 					g.setColor(Color.decode("#0A122A"));
 					g.setFont(new Font("微软雅黑", Font.BOLD, 20));
@@ -128,9 +132,11 @@ public class GameFrame{
 
 			// 计算线所在区域的左上角和右下角点
 			DrawPoint[] tPoint = rebuildPoint(plss[i].getEdges().getP1(),plss[i].getEdges().getP2());
+			System.out.println(tPoint[1].getX()-tPoint[0].getX());
 //			// 防区域交叉
 			tPoint[0].setX(tPoint[0].getX()+r);
 			tPoint[0].setY(tPoint[0].getY()+r);
+			System.out.println(tPoint[1].getX()-tPoint[0].getX());
 			// 创建组件
 			line[i] = new JLine(plss[i].getEdges(),tPoint[0].getX(),tPoint[0].getY(),0,plss[i].getEdges().getP1(),plss[i].getEdges().getP2());
 			// 计算点击区域大小
@@ -145,7 +151,7 @@ public class GameFrame{
 //			System.out.println("old:x"+x+",y:"+y+",width:"+width+",height:"+height);
 			line[i].setBounds(x,y,width,height);
 			// 线边框
-//			line[i].setBorder(BorderFactory.createLineBorder(Color.red));
+			//line[i].setBorder(BorderFactory.createLineBorder(Color.red));
 			if(mode==PLAYMODE) // 游戏模式才加监听
 				line[i].addMouseListener(listener);
 			panel.add(line[i]);

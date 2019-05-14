@@ -38,7 +38,8 @@ public class InputFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				super.mouseClicked(e);
-				GameController.getInstance().recall();
+				if(((JButton)e.getSource()).isEnabled())
+					GameController.getInstance().recall();
 			}
 		});
 		input.add(recall);
@@ -68,7 +69,8 @@ public class InputFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				super.mouseClicked(e);
-				GameController.getInstance().reset();
+				if(((JButton)e.getSource()).isEnabled())
+					GameController.getInstance().reset();
 			}
 		});
 		input.add(reset);
