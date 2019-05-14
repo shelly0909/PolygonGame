@@ -156,7 +156,7 @@ public class BestSolutionController {
             for(int k=0;k<tmp.length-1;j++){
                 if(tmp[j].points.equals(tP)){
                     continue;
-                }else if(tmp[j].points.getPoint().getNum().compareTo(res)==0){
+                }else if(tmp[j]==tmp[i]){
                     ColorOne[stepNum] = k;
                 }
                 t1[k] = tmp[j];

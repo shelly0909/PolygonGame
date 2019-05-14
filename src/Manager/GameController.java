@@ -101,7 +101,7 @@ public class GameController {
             for(int k=0;k<tmp.length-1;j++){
                 if(tmp[j].points.equals(tP)){
                     continue;
-                }else if(tmp[j].points.getPoint().getNum()==res){
+                }else if(tmp[j]==tmp[i]){
                     gameFrame.setColorOne(k); // 记录新计算的点
                     Color[stepNum] = k;
                 }
