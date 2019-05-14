@@ -34,7 +34,7 @@ public class BestFrame extends JFrame {
         gamePanel.setVisible(true);
 
         // 上下标签
-        JLabel top = new JLabel("多边形游戏");
+        JLabel top = new JLabel("最高分演示方案");
         JLabel bottom = new JLabel("Copyright © 2018-2019 CDM All Rights Reserved.");
         top.setOpaque(true);
         top.setBackground(Color.decode("#0A122A"));

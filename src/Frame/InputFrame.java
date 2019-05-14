@@ -3,6 +3,9 @@ package Frame;
 import Manager.GameController;
 
 import javax.swing.*;
+
+import Element.NButton;
+
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -18,12 +21,19 @@ public class InputFrame {
 
 	public JPanel init() {
 		JPanel input = new JPanel();
+		input.setLayout(null);
 		this.inputPanel = input;
 		input.setPreferredSize(new Dimension(width, height));
 		input.setBackground(Color.decode("#F18F01"));
+		
+		//按钮字体设置
+		Font btfont = new Font("微软雅黑", 1, 16);
 
 		// 撤回按钮
-		recall = new JButton("撤回");
+		recall = new NButton("#FFFFFF","#0A122A","撤回");
+		recall.setFont(btfont);
+		recall.setSize(70, 40);
+		recall.setLocation(110, 50);
 		recall.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -34,7 +44,11 @@ public class InputFrame {
 		input.add(recall);
 
 		// 查看最高分按钮
-		showBest = new JButton("best");
+		showBest = new NButton("#FFFFFF","#0A122A","最高分方案");
+		showBest.setFont(btfont);
+		showBest.setForeground(Color.decode("#0A122A"));
+		showBest.setSize(150, 40);
+		showBest.setLocation(80, 230);
 		showBest.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -46,8 +60,11 @@ public class InputFrame {
 		input.add(showBest);
 
 		// 重置按钮
-		 reset = new JButton("reset");
-		reset.addMouseListener(new MouseAdapter() {
+		 reset = new NButton("#FFFFFF","#0A122A","重置");
+		 reset.setFont(btfont);
+		 reset.setSize(70, 40);
+		 reset.setLocation(110, 150);
+		 reset.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				super.mouseClicked(e);
@@ -57,7 +74,10 @@ public class InputFrame {
 		input.add(reset);
 
 		// 查看历史记录按钮
-		JButton history = new JButton("history");
+		JButton history = new NButton("#FFFFFF","#0A122A","历史记录");
+		history.setFont(btfont);
+		history.setSize(100, 40);
+		history.setLocation(80, 300);
 		history.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -68,7 +88,10 @@ public class InputFrame {
 		input.add(history);
 
 		// 清除所有历史记录按钮
-		JButton clearHistory = new JButton("clearHistory");
+		JButton clearHistory = new NButton("#FFFFFF","#0A122A","清空历史记录");
+		clearHistory.setFont(btfont);
+		clearHistory.setSize(160, 40);
+		clearHistory.setLocation(80, 380);
 		clearHistory.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {

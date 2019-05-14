@@ -2,6 +2,7 @@ package Frame;
 
 import Element.BackGroundPanel;
 import Element.JHistory;
+import Element.NButton;
 import Manager.GameController;
 import Manager.PolygonManager;
 
@@ -39,15 +40,17 @@ public class MainFrame extends JFrame {
 
 
 		JLabel Welcome = new JLabel("欢迎来到多边形游戏");
-		Welcome.setSize(300,50);
-		Welcome. setLocation(250,210);
+		Welcome.setSize(300,80);
+		Welcome. setLocation(250,250);
 		Welcome.setFont( new Font("楷体",1,30));
 		Welcome.setForeground(Color.PINK);
 
-		JButton btn_start = new JButton("开始游戏");
+		JButton btn_start = new NButton("#F18F01","#FFFFFF","开始游戏");
 		btn_start.setSize(160, 50);
-		btn_start.setLocation(300, 300);
-		btn_start.setFont(new Font("黑体",1,25));
+		btn_start.setLocation(300, 380);
+		btn_start.setBorderPainted(false);
+		btn_start.setBorder(BorderFactory.createRaisedBevelBorder()); 
+		btn_start.setFont(new Font("微软雅黑", Font.BOLD,25));
 		btn_start.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -73,14 +76,14 @@ public class MainFrame extends JFrame {
 	public void choose(){
 		beforePanel.removeAll();
 		SwingUtilities.updateComponentTreeUI(this);
-		JButton btn_Random = new JButton("随机生成");
-		JButton btn_Define = new JButton("自定义");
-		Font btn = new Font("黑体",2,30);
+		JButton btn_Random = new NButton("#F18F01","#FFFFFF","随机生成");
+		JButton btn_Define = new NButton("#F18F01","#FFFFFF","自定义");
+		Font btn = new Font("微软雅黑", Font.BOLD,25);
 		btn_Random.setSize(160, 50);
-		btn_Random.setLocation(300, 250);
+		btn_Random.setLocation(300, 300);
 		btn_Random.setFont(btn);
 		btn_Define.setSize(160, 50);
-		btn_Define.setLocation(300, 350);
+		btn_Define.setLocation(300, 400);
 		btn_Define.setFont(btn);
 
 		beforePanel.add(btn_Define);
@@ -191,11 +194,14 @@ public class MainFrame extends JFrame {
 		TipsPanel = new JPanel();
 		TipsPanel.setLayout(null);
 		TipsPanel.setPreferredSize(new Dimension(450,450));
-		JLabel label = new JLabel("<html><body>请输入n，节点及操作符<br/>各节点和操作符之间用英文,分割<br/>" +
-				"节点和操作符的关系为：<br/>节点1，节点2...<br/>节点1顺时针的操作符，节点2顺时针的操作符<br/></body></html>");
+		JLabel label = new JLabel("<html><body>这里是关于输入的提示哦OvO<br/>请输入n，节点,操作符,范围数<br/>各节点和操作符之间用英文,分割<br/>" +
+				"节点和操作符的关系为：<br/>节点1，节点2...<br/>节点1顺时针的操作符，节点2顺时针的操作符<br/>例如输入节点数：5<br/>节点数：1,2,3,4,5<br/>操作符数：+,*,*,+,+<br/>范围数：-2(下界),10(上界)</body></html>");
+		label.setFont(new Font("微软雅黑",0, 18));
 		label.setBounds(0,0,400,400);
+		label.setLocation(60,40);
 		TipsPanel.add(label);
-		add(TipsPanel, BorderLayout.WEST);
+		
+		add(TipsPanel, BorderLayout.CENTER);
 	}
 
 	/**
