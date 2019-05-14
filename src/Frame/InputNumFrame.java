@@ -204,15 +204,30 @@ public class InputNumFrame {
 						tips.setText("N超出范围，请重新输入");
 					}
 				}
-				num = randomNum(-10, 20);
 				String str = "";
-				for (int i = 0; i < N; i++) {
-					if (i == N - 1) {
-						str += num[i];
-						break;
+				if(MODE==INTEGERMODE){
+					num = randomNum(-10, 20,N);
+					for (int i = 0; i < N; i++) {
+						if (i == N - 1) {
+							str += num[i];
+							break;
+						}
+						str += num[i] + ",";
 					}
-					str += num[i] + ",";
 				}
+				else if(MODE == RANGEMODE)
+				{
+					num = randomNum(-10,20,2);
+					for (int i = 0; i < 2; i++) {
+						if (i == 2 - 1) {
+							str += num[i];
+							break;
+						}
+						str += num[i] + ",";
+					}
+				}
+
+
 				numInput.setText(str);
 			}
 		});
@@ -349,7 +364,7 @@ public class InputNumFrame {
 			}
 		}
 
-		return randomNum(min, max);
+		return randomNum(min, max,N);
 	}
 
 	/**
@@ -361,7 +376,7 @@ public class InputNumFrame {
 	 *            上界
 	 * @return
 	 */
-	public int[] randomNum(int min, int max) {
+	public int[] randomNum(int min, int max,int N) {
 		int[] num;
 		num = new int[N];
 		for (int i = 0; i < N; i++) {
